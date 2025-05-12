@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: ["lucasMezza_p1_dev","lucasMezza_p1_base"]
+    branches: ["lucasMezza_p2_dev","lucasMezza_p2_base"]
 
   workflow_dispatch:
 
