@@ -76,7 +76,7 @@ jobs:
 
       - name: Pull Redis image
         run: docker pull redis:alpine
-
+ 
       - name: Pull docker image  
         run:  docker pull ${{ secrets.DOCKER_USERNAME }}/restapp:${{ env.IMAGE_TAG }}
 
