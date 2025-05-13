@@ -95,7 +95,7 @@ jobs:
  
       - name: Pull docker image  
         run:  docker pull "$env:DOCKER_USERNAME/restapp:$env:IMAGE_TAG"
-
+ 
       # - name: Stop and remove existing redisService container  
       #   run: |
       #     docker stop redisService
