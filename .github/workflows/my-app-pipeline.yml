@@ -83,7 +83,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Set env variables
-        run: |
+        run: | 
           $branchName = "${env:GITHUB_REF_NAME}" -replace '/', '-' 
           $branchName = $branchName.ToLower()
           echo "BRANCH_NAME=$branchName" | Out-File -FilePath $env:GITHUB_ENV -Append
