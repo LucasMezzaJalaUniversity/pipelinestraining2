@@ -22,6 +22,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+
+      - name: Set env variables
+        run: |
+          $branchName = "${env:GITHUB_REF_NAME}" -replace '/', '-'
+          "BRANCH_NAME=$branchName" | Out-File -FilePath $env:GITHUB_ENV -Append
+          "SEM_VERSION=${env:GITHUB_RUN_NUMBER}" | Out-File -FilePath $env:GITHUB_ENV -Append
+          "IMAGE_TAG=$branchName-1.0.0+${env:GITHUB_RUN_NUMBER}" | Out-File -FilePath $env:GITHUB_ENV -Append
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -40,7 +48,7 @@ jobs:
 
       - name: Debug BRANCH_NAME
         run: |
-          echo "BRANCH_NAME=${{ env.BRANCH_NAME }}"
+          echo "BRANCH_NAME=$env:BRANCH_NAME"
 
   ## 🔧 2. 
   Build:
@@ -58,13 +66,13 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: build docker image
-        run: docker build -t "$env:IMAGE_NAME:${BRANCH_NAME}-1.0.0+${SEM_VERSION}" .
+        run: docker build -t "$env:IMAGE_NAME:$env:BRANCH_NAME-1.0.0+$env:SEM_VERSION" .
 
       - name: tag docker image
-        run: docker tag "$env:IMAGE_NAME:${BRANCH_NAME}-1.0.0+${SEM_VERSION}" "$env:DOCKER_USERNAME/$env:IMAGE_NAME:${BRANCH_NAME}-1.0.0+${SEM_VERSION}"
+        run: docker tag "$env:IMAGE_NAME:$env:BRANCH_NAME-1.0.0+$env:SEM_VERSION" "$env:DOCKER_USERNAME/$env:IMAGE_NAME:$env:BRANCH_NAME-1.0.0+$env:SEM_VERSION"
 
       - name: push docker image
-        run: docker push "$env:DOCKER_USERNAME/$env:IMAGE_NAME:${BRANCH_NAME}-1.0.0+${SEM_VERSION}"
+        run: docker push "$env:DOCKER_USERNAME/$env:IMAGE_NAME:$env:BRANCH_NAME-1.0.0+$env:SEM_VERSION"
 
   ## 🚀 3. 
   deploy-dev:
@@ -82,7 +90,7 @@ jobs:
         run: docker pull redis:alpine
  
       - name: Pull docker image  
-        run:  docker pull "$env:DOCKER_USERNAME/$env:IMAGE_NAME:${BRANCH_NAME}-1.0.0+${SEM_VERSION}"
+        run:  docker pull "$env:DOCKER_USERNAME/$env:IMAGE_NAME:$env:BRANCH_NAME-1.0.0+$env:SEM_VERSION"
 
       - name: Stop existing Redis container if running
         run: |
@@ -103,7 +111,7 @@ jobs:
 
       - name: Run REST app container
         run: |
-          docker run --name "restapp" --add-host "redis:$env:REDIS_IP" -p "5000:5000" -d "$env:DOCKER_USERNAME/$env:IMAGE_NAME:${BRANCH_NAME}-1.0.0+${SEM_VERSION}"
+          docker run --name "restapp" --add-host "redis:$env:REDIS_IP" -p "5000:5000" -d "$env:DOCKER_USERNAME/$env:IMAGE_NAME:$env:BRANCH_NAME-1.0.0+$env:SEM_VERSION"
 
       - name: Run Integration Tests
         run: |
@@ -127,7 +135,7 @@ jobs:
         run: docker pull redis:alpine
        
       - name: Pull docker image  
-        run:  docker pull "$env:DOCKER_USERNAME/$env:IMAGE_NAME:${BRANCH_NAME}-1.0.0+${SEM_VERSION}"
+        run:  docker pull "$env:DOCKER_USERNAME/$env:IMAGE_NAME:$env:BRANCH_NAME-1.0.0+$env:SEM_VERSION"
 
       - name: Stop existing Redis container if running
         run: |
@@ -148,7 +156,7 @@ jobs:
 
       - name: Run REST app container
         run: |
-          docker run --name "restapp" --add-host "redis:$env:REDIS_IP" -p "5000:5000" -d "$env:DOCKER_USERNAME/$env:IMAGE_NAME:${BRANCH_NAME}-1.0.0+${SEM_VERSION}"
+          docker run --name "restapp" --add-host "redis:$env:REDIS_IP" -p "5000:5000" -d "$env:DOCKER_USERNAME/$env:IMAGE_NAME:$env:BRANCH_NAME-1.0.0+$env:SEM_VERSION"
 
       - name: Run Integration Tests
         run: |
