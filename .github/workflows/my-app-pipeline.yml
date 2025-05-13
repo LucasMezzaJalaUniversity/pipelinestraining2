@@ -98,8 +98,8 @@ jobs:
 
       - name: Stop existing Redis container if running
         run: |
-          docker stop redisService || true
-          docker rm redisService || true
+          docker stop redisService
+          docker rm redisService
 
       - name: Run Redis container
         run: docker run --name "redisService" -p "6379:6379" -d redis:alpine
@@ -110,8 +110,8 @@ jobs:
 
       - name: Stop and remove old REST app container
         run: |
-          docker stop restapp || true
-          docker rm restapp || true
+          docker stop restapp
+          docker rm restapp
 
       - name: Run REST app container
         run: |
@@ -151,8 +151,8 @@ jobs:
 
       - name: Stop existing Redis container if running
         run: |
-          docker stop redisService || true
-          docker rm redisService || true
+          docker stop redisService
+          docker rm redisService
 
       - name: Run Redis container
         run: docker run --name "redisService" -p "6379:6379" -d redis:alpine
@@ -163,8 +163,8 @@ jobs:
 
       - name: Stop and remove old REST app container
         run: |
-          docker stop restapp || true
-          docker rm restapp || true
+          docker stop restapp
+          docker rm restapp
 
       - name: Run REST app container
         run: |
