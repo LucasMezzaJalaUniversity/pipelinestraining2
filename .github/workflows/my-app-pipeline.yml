@@ -123,7 +123,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set env variables 
+      - name: Set env variables  
         run: |
           $branchName = "${env:GITHUB_REF_NAME}" -replace '/', '-'
           $branchName = $branchName.ToLower()
