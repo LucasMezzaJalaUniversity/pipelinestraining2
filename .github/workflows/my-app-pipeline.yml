@@ -112,7 +112,7 @@ jobs:
       - name: Stop any existing containers  
         run: docker-compose down
 
-      - name: Run with docker-compose
+      - name: Run with docker-compose 
         run: docker-compose up -d 
 
       - name: Run Integration Tests
