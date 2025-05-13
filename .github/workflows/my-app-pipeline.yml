@@ -103,7 +103,7 @@ jobs:
         run:  docker pull "$env:DOCKER_USERNAME/restapp:$env:IMAGE_TAG"
 
       - name: Generate .env file for docker-compose
-        run: echo "IMAGE_TAG=$env:IMAGE_TAG" >> .env
+        run: Set-Content -Path .env -Value "IMAGE_TAG=$env:IMAGE_TAG" -Encoding UTF8
 
       - name: Stop any existing containers
         run: docker-compose -f docker-compose.yml down
