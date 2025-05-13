@@ -98,9 +98,7 @@ jobs:
 
       - name: Replace image tag in docker-compose file
         run: |
-          (Get-Content docker-compose.yml) -replace '\$DOCKER_USERNAME', "$env:DOCKER_USERNAME" `
-                                          -replace '\$IMAGE_NAME', "$env:IMAGE_NAME" `
-                                          -replace '\$IMAGE_TAG', "$env:IMAGE_TAG" | Set-Content docker-compose.generated.yml
+          (Get-Content docker-compose.yml) -replace '\$IMAGE_TAG', "$env:IMAGE_TAG" | Set-Content docker-compose.generated.yml
 
       - name: Stop any existing containers
         run: docker-compose -f docker-compose.yml down
@@ -142,9 +140,7 @@ jobs:
 
       - name: Replace image tag in docker-compose file
         run: |
-          (Get-Content docker-compose.yml) -replace '\$DOCKER_USERNAME', "$env:DOCKER_USERNAME" `
-                                          -replace '\$IMAGE_NAME', "$env:IMAGE_NAME" `
-                                          -replace '\$IMAGE_TAG', "$env:IMAGE_TAG" | Set-Content docker-compose.generated.yml
+          (Get-Content docker-compose.yml) -replace '\$IMAGE_TAG', "$env:IMAGE_TAG" | Set-Content docker-compose.generated.yml
 
       - name: Stop any existing containers
         run: docker-compose -f docker-compose.yml down
