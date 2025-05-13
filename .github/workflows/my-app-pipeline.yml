@@ -58,7 +58,7 @@ jobs:
           $branchName = "${env:GITHUB_REF_NAME}" -replace '/', '-'
           echo "BRANCH_NAME=$branchName" | Out-File -FilePath $env:GITHUB_ENV -Append
           echo "SEM_VERSION=${env:GITHUB_RUN_NUMBER}" | Out-File -FilePath $env:GITHUB_ENV -Append
-          echo "IMAGE_TAG=$branchName-1.0.0+${env:GITHUB_RUN_NUMBER}" | Out-File -FilePath $env:GITHUB_ENV -Append
+          echo "IMAGE_TAG=$branchName-1.0.${env:GITHUB_RUN_NUMBER}" | Out-File -FilePath $env:GITHUB_ENV -Append
 
       - name: build docker image
         run: docker build -t "$env:IMAGE_NAME:$env:IMAGE_TAG" .
