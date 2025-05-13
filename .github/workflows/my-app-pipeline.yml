@@ -108,10 +108,10 @@ jobs:
         id: redisip
         run: echo "REDIS_IP=$(docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' redisService)" >> $env:GITHUB_ENV
 
-      # - name: Stop and remove old REST app container
-      #   run: |
-      #     docker stop restapp 2>$null
-      #     docker rm restapp 2>$null
+      - name: Stop and remove old REST app container
+        run: |
+          docker stop restapp 2>$null
+          docker rm restapp 2>$null
 
       - name: Run REST app container
         run: |
