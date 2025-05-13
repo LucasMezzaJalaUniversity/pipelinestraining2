@@ -7,8 +7,9 @@ on:
   workflow_dispatch:
 
 env: 
-  SEM_VERSION: ""
-  IMAGE_NAME:  ""
+  SEM_VERSION: ${{ github.run_number }}
+  IMAGE_NAME:  "restapp"
+  BRANCH_NAME:  ${{ github.ref_name }}
 
 jobs:
   ## 🔧 1. 
@@ -51,16 +52,13 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: tag docker image
-        run: |
-          BRANCH_NAME=${GITHUB_REF##*/}
-          BUILD_NUMBER=${GITHUB_RUN_NUMBER}
-          echo "IMAGE_TAG=$BRANCH_NAME:1.0.0+$BUILD_NUMBER" >> $GITHUB_ENV
+        run: echo "IMAGE_TAG=${BRANCH_NAME}:1.0.0+${SEM_VERSION}" >> $GITHUB_ENV
 
       - name: build docker image
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/restapp:${{ env.IMAGE_TAG }} .
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME:${{ env.IMAGE_TAG }} .
 
       - name: push docker image
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/restapp:${{ env.IMAGE_TAG }}
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME:${{ env.IMAGE_TAG }}
 
   ## 🚀 3. 
   deploy-dev:
@@ -78,7 +76,7 @@ jobs:
         run: docker pull redis:alpine
  
       - name: Pull docker image  
-        run:  docker pull ${{ secrets.DOCKER_USERNAME }}/restapp:${{ env.IMAGE_TAG }}
+        run:  docker pull ${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME:${{ env.IMAGE_TAG }}
 
       - name: Stop existing Redis container if running
         run: |
@@ -99,7 +97,7 @@ jobs:
 
       - name: Run REST app container
         run: |
-          docker run --name "restapp" --add-host "redis:${{ env.REDIS_IP }}" -p "5000:5000" -d ${{ secrets.DOCKER_USERNAME }}/restapp:${{ env.IMAGE_TAG }}
+          docker run --name "restapp" --add-host "redis:${{ env.REDIS_IP }}" -p "5000:5000" -d ${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME:${{ env.IMAGE_TAG }}
 
       - name: Run Integration Tests
         run: |
