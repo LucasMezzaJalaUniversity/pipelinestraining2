@@ -103,7 +103,7 @@ jobs:
 
       # - name: Stop and remove existing docker container
       #   run: |
-      #     docker stop restapp
+      #     docker stop restapp 
       #     docker rm  restapp
 
       - name: Generate .env file for docker-compose
