@@ -53,14 +53,14 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: tag docker image
-        run: echo "IMAGE_TAG=${BRANCH_NAME}-1.0.0+${SEM_VERSION}" >> $env:GITHUB_ENV
-
       - name: build docker image
-        run: docker build -t "$env:DOCKER_USERNAME/$env:IMAGE_NAME:$env:IMAGE_TAG" .
+        run: docker build -t "$env:IMAGE_NAME:${BRANCH_NAME}-1.0.0+${SEM_VERSION}" .
+
+      - name: tag docker image
+        run: docker tag "$env:IMAGE_NAME:${BRANCH_NAME}-1.0.0+${SEM_VERSION}" "$env:DOCKER_USERNAME/$env:IMAGE_NAME:${BRANCH_NAME}-1.0.0+${SEM_VERSION}"
 
       - name: push docker image
-        run: docker push "$env:DOCKER_USERNAME/$env:IMAGE_NAME:$env:IMAGE_TAG"
+        run: docker push "$env:DOCKER_USERNAME/$env:IMAGE_NAME:${BRANCH_NAME}-1.0.0+${SEM_VERSION}"
 
   ## 🚀 3. 
   deploy-dev:
@@ -78,7 +78,7 @@ jobs:
         run: docker pull redis:alpine
  
       - name: Pull docker image  
-        run:  docker pull "$env:DOCKER_USERNAME/$env:IMAGE_NAME:$env:IMAGE_TAG"
+        run:  docker pull "$env:DOCKER_USERNAME/$env:IMAGE_NAME:${BRANCH_NAME}-1.0.0+${SEM_VERSION}"
 
       - name: Stop existing Redis container if running
         run: |
@@ -99,7 +99,7 @@ jobs:
 
       - name: Run REST app container
         run: |
-          docker run --name "restapp" --add-host "redis:$env:REDIS_IP" -p "5000:5000" -d "$env:DOCKER_USERNAME/$env:IMAGE_NAME:$env:IMAGE_TAG"
+          docker run --name "restapp" --add-host "redis:$env:REDIS_IP" -p "5000:5000" -d "$env:DOCKER_USERNAME/$env:IMAGE_NAME:${BRANCH_NAME}-1.0.0+${SEM_VERSION}"
 
       - name: Run Integration Tests
         run: |
@@ -123,7 +123,7 @@ jobs:
         run: docker pull redis:alpine
        
       - name: Pull docker image  
-        run:  docker pull "$env:DOCKER_USERNAME/$env:IMAGE_NAME:$env:IMAGE_TAG"
+        run:  docker pull "$env:DOCKER_USERNAME/$env:IMAGE_NAME:${BRANCH_NAME}-1.0.0+${SEM_VERSION}"
 
       - name: Stop existing Redis container if running
         run: |
@@ -144,7 +144,7 @@ jobs:
 
       - name: Run REST app container
         run: |
-          docker run --name "restapp" --add-host "redis:$env:REDIS_IP" -p "5000:5000" -d "$env:DOCKER_USERNAME/$env:IMAGE_NAME:$env:IMAGE_TAG"
+          docker run --name "restapp" --add-host "redis:$env:REDIS_IP" -p "5000:5000" -d "$env:DOCKER_USERNAME/$env:IMAGE_NAME:${BRANCH_NAME}-1.0.0+${SEM_VERSION}"
 
       - name: Run Integration Tests
         run: |
