@@ -56,6 +56,7 @@ jobs:
       - name: Set env variables
         run: |
           $branchName = "${env:GITHUB_REF_NAME}" -replace '/', '-'
+          $branchName = $branchName.ToLower()
           echo "BRANCH_NAME=$branchName" | Out-File -FilePath $env:GITHUB_ENV -Append
           echo "SEM_VERSION=${env:GITHUB_RUN_NUMBER}" | Out-File -FilePath $env:GITHUB_ENV -Append
           echo "IMAGE_TAG=$branchName-1.0.${env:GITHUB_RUN_NUMBER}" | Out-File -FilePath $env:GITHUB_ENV -Append
@@ -81,11 +82,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Set env variables
+        run: |
+          $branchName = "${env:GITHUB_REF_NAME}" -replace '/', '-'
+          $branchName = $branchName.ToLower()
+          echo "BRANCH_NAME=$branchName" | Out-File -FilePath $env:GITHUB_ENV -Append
+          echo "SEM_VERSION=${env:GITHUB_RUN_NUMBER}" | Out-File -FilePath $env:GITHUB_ENV -Append
+          echo "IMAGE_TAG=$branchName-1.0.${env:GITHUB_RUN_NUMBER}" | Out-File -FilePath $env:GITHUB_ENV -Append
+
       - name: Pull Redis image
         run: docker pull redis:alpine
  
       - name: Pull docker image  
-        run:  docker pull "$env:DOCKER_USERNAME/$env:IMAGE_NAME:$env:BRANCH_NAME-1.0.0+$env:SEM_VERSION"
+        run:  docker pull "$env:DOCKER_USERNAME/$env:IMAGE_NAME:$env:IMAGE_TAG"
 
       - name: Stop existing Redis container if running
         run: |
@@ -106,7 +115,7 @@ jobs:
 
       - name: Run REST app container
         run: |
-          docker run --name "restapp" --add-host "redis:$env:REDIS_IP" -p "5000:5000" -d "$env:DOCKER_USERNAME/$env:IMAGE_NAME:$env:BRANCH_NAME-1.0.0+$env:SEM_VERSION"
+          docker run --name "restapp" --add-host "redis:$env:REDIS_IP" -p "5000:5000" -d "$env:DOCKER_USERNAME/$env:IMAGE_NAME:$env:IMAGE_TAG"
 
       - name: Run Integration Tests
         run: |
@@ -126,11 +135,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Set env variables 
+        run: |
+          $branchName = "${env:GITHUB_REF_NAME}" -replace '/', '-'
+          $branchName = $branchName.ToLower()
+          echo "BRANCH_NAME=$branchName" | Out-File -FilePath $env:GITHUB_ENV -Append
+          echo "SEM_VERSION=${env:GITHUB_RUN_NUMBER}" | Out-File -FilePath $env:GITHUB_ENV -Append
+          echo "IMAGE_TAG=$branchName-1.0.${env:GITHUB_RUN_NUMBER}" | Out-File -FilePath $env:GITHUB_ENV -Append
+
       - name: Pull Redis image
         run: docker pull redis:alpine
        
       - name: Pull docker image  
-        run:  docker pull "$env:DOCKER_USERNAME/$env:IMAGE_NAME:$env:BRANCH_NAME-1.0.0+$env:SEM_VERSION"
+        run:  docker pull "$env:DOCKER_USERNAME/$env:IMAGE_NAME:$env:IMAGE_TAG"
 
       - name: Stop existing Redis container if running
         run: |
@@ -151,7 +168,7 @@ jobs:
 
       - name: Run REST app container
         run: |
-          docker run --name "restapp" --add-host "redis:$env:REDIS_IP" -p "5000:5000" -d "$env:DOCKER_USERNAME/$env:IMAGE_NAME:$env:BRANCH_NAME-1.0.0+$env:SEM_VERSION"
+          docker run --name "restapp" --add-host "redis:$env:REDIS_IP" -p "5000:5000" -d "$env:DOCKER_USERNAME/$env:IMAGE_NAME:$env:IMAGE_TAG"
 
       - name: Run Integration Tests
         run: |
