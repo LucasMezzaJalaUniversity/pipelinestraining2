@@ -96,26 +96,17 @@ jobs:
       - name: Pull docker image  
         run:  docker pull "$env:DOCKER_USERNAME/$env:IMAGE_NAME:$env:IMAGE_TAG"
 
-      - name: Stop existing Redis container if running
+      - name: Replace image tag in docker-compose file
         run: |
-          docker stop redisService 2>$null
-          docker rm redisService 2>$null
+          (Get-Content docker-compose.yml) -replace '\$DOCKER_USERNAME', "$env:DOCKER_USERNAME" `
+                                          -replace '\$IMAGE_NAME', "$env:IMAGE_NAME" `
+                                          -replace '\$IMAGE_TAG', "$env:IMAGE_TAG" | Set-Content docker-compose.generated.yml
 
-      - name: Run Redis container
-        run: docker run --name "redisService" -p "6379:6379" -d redis:alpine
+      - name: Stop any existing containers
+        run: docker-compose -f docker-compose.yml down
 
-      - name: Get Redis container IP
-        id: redisip
-        run: echo "REDIS_IP=$(docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' redisService)" >> $env:GITHUB_ENV
-
-      - name: Stop and remove old REST app container
-        run: |
-          docker stop restapp 2>$null
-          docker rm restapp 2>$null
-
-      - name: Run REST app container
-        run: |
-          docker run --name "restapp" --add-host "redis:$env:REDIS_IP" -p "5000:5000" -d "$env:DOCKER_USERNAME/$env:IMAGE_NAME:$env:IMAGE_TAG"
+      - name: Start services using Docker Compose
+        run: docker-compose -f docker-compose.yml up -d
 
       - name: Run Integration Tests
         run: |
@@ -149,27 +140,18 @@ jobs:
       - name: Pull docker image  
         run:  docker pull "$env:DOCKER_USERNAME/$env:IMAGE_NAME:$env:IMAGE_TAG"
 
-      - name: Stop existing Redis container if running
+      - name: Replace image tag in docker-compose file
         run: |
-          docker stop redisService
-          docker rm redisService
+          (Get-Content docker-compose.yml) -replace '\$DOCKER_USERNAME', "$env:DOCKER_USERNAME" `
+                                          -replace '\$IMAGE_NAME', "$env:IMAGE_NAME" `
+                                          -replace '\$IMAGE_TAG', "$env:IMAGE_TAG" | Set-Content docker-compose.generated.yml
 
-      - name: Run Redis container
-        run: docker run --name "redisService" -p "6379:6379" -d redis:alpine
+      - name: Stop any existing containers
+        run: docker-compose -f docker-compose.yml down
 
-      - name: Get Redis container IP
-        id: redisip
-        run: echo "REDIS_IP=$(docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' redisService)" >> $env:$GITHUB_ENV
-
-      - name: Stop and remove old REST app container
-        run: |
-          docker stop restapp
-          docker rm restapp
-
-      - name: Run REST app container
-        run: |
-          docker run --name "restapp" --add-host "redis:$env:REDIS_IP" -p "5000:5000" -d "$env:DOCKER_USERNAME/$env:IMAGE_NAME:$env:IMAGE_TAG"
-
+      - name: Start services using Docker Compose
+        run: docker-compose -f docker-compose.yml up -d
+        
       - name: Run Integration Tests
         run: |
           pip install -r requirements.txt
