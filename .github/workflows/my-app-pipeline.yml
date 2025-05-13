@@ -116,7 +116,7 @@ jobs:
         run: docker-compose up -d 
 
       - name: Run Integration Tests
-        run: |
+        run: | 
           pip install -r requirements.txt
           python -m pytest test/integration -v
 
