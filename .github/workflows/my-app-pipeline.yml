@@ -150,7 +150,7 @@ jobs:
       - name: Generate .env file for docker-compose 
         run: echo "IMAGE_TAG=$env:IMAGE_TAG" >> .env
       
-      - name: Stop any existing containers
+      - name: Stop any existing containers 
         run: docker-compose -f docker-compose.yml down
 
       - name: Run with docker-compose
