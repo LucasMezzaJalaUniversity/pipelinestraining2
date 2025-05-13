@@ -98,8 +98,8 @@ jobs:
 
       - name: Stop existing Redis container if running
         run: |
-          docker stop redisService 2>$null
-          docker rm redisService 2>$null
+          try { docker stop redisService } catch { Write-Host "redisService not running." }
+          try { docker rm redisService } catch { Write-Host "redisService does not exist." }
 
       - name: Run Redis container
         run: docker run --name "redisService" -p "6379:6379" -d redis:alpine
@@ -110,8 +110,8 @@ jobs:
 
       - name: Stop and remove old REST app container
         run: |
-          docker stop restapp 2>$null
-          docker rm restapp 2>$null
+          try { docker stop restapp } catch { Write-Host "restapp container not running." }
+          try { docker rm restapp } catch { Write-Host "restapp container does not exist." }
 
       - name: Run REST app container
         run: |
