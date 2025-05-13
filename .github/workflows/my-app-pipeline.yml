@@ -96,10 +96,10 @@ jobs:
       - name: Pull docker image  
         run:  docker pull "$env:DOCKER_USERNAME/$env:IMAGE_NAME:$env:IMAGE_TAG"
 
-      # - name: Stop existing Redis container if running
-      #   run: |
-      #     docker stop redisService
-      #     docker rm redisService
+      - name: Stop existing Redis container if running
+        run: |
+          docker stop redisService 2>$null
+          docker rm redisService 2>$null
 
       - name: Run Redis container
         run: docker run --name "redisService" -p "6379:6379" -d redis:alpine
