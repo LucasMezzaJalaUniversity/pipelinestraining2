@@ -100,7 +100,7 @@ jobs:
         run: Set-Content -Path .env -Value "IMAGE_TAG=$env:IMAGE_TAG" -Encoding UTF8
 
       - name: Stop any existing containers
-        run: docker-compose -f docker-compose.yml down
+        run: docker-compose down
 
       - name: Run with docker-compose
         run: docker-compose up -d
