@@ -96,15 +96,15 @@ jobs:
       - name: Pull docker image  
         run:  docker pull "$env:DOCKER_USERNAME/restapp:$env:IMAGE_TAG"
  
-      # - name: Stop and remove existing redisService container  
-      #   run: |
-      #     docker stop redisService 
-      #     docker rm redisService
+      - name: Stop and remove existing redisService container  
+        run: |
+          docker stop redisService 
+          docker rm redisService
 
-      # - name: Stop and remove existing docker container
-      #   run: |
-      #     docker stop restapp 
-      #     docker rm  restapp
+      - name: Stop and remove existing docker container
+        run: |
+          docker stop restapp 
+          docker rm  restapp
 
       - name: Generate .env file for docker-compose
         run: Set-Content -Path .env -Value "IMAGE_TAG=$env:IMAGE_TAG" -Encoding UTF8
