@@ -109,7 +109,7 @@ jobs:
       - name: Generate .env file for docker-compose
         run: Set-Content -Path .env -Value "IMAGE_TAG=$env:IMAGE_TAG" -Encoding UTF8
 
-      - name: Stop any existing containers 
+      - name: Stop any existing containers  
         run: docker-compose down
 
       - name: Run with docker-compose
