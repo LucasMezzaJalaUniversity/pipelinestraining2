@@ -109,10 +109,10 @@ jobs:
       - name: Generate .env file for docker-compose
         run: Set-Content -Path .env -Value "IMAGE_TAG=$env:IMAGE_TAG" -Encoding UTF8
 
-      - name: Stop any existing containers 
+      - name: Stop any existing containers  
         run: docker-compose down
 
-      - name: Run with docker-compose
+      - name: Run with docker-compose 
         run: docker-compose up -d 
 
       - name: Run Integration Tests
@@ -157,14 +157,14 @@ jobs:
           docker stop restapp
           docker rm  restapp
 
-      - name: Generate .env file for docker-compose 
-        run: echo "IMAGE_TAG=$env:IMAGE_TAG" >> .env
-      
-      - name: Stop any existing containers 
-        run: docker-compose -f docker-compose.yml down
+      - name: Generate .env file for docker-compose
+        run: Set-Content -Path .env -Value "IMAGE_TAG=$env:IMAGE_TAG" -Encoding UTF8
 
-      - name: Run with docker-compose
-        run: docker-compose up -d
+      - name: Stop any existing containers  
+        run: docker-compose down
+
+      - name: Run with docker-compose 
+        run: docker-compose up -d 
         
       - name: Run Integration Tests
         run: |
