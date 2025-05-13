@@ -76,7 +76,7 @@ jobs:
         run: docker pull redis:alpine
  
       - name: Pull docker image  
-        run:  docker pull ${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME:${{ env:IMAGE_TAG }}
+        run:  docker pull ${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME:$env:IMAGE_TAG
 
       - name: Stop existing Redis container if running
         run: |
@@ -97,7 +97,7 @@ jobs:
 
       - name: Run REST app container
         run: |
-          docker run --name "restapp" --add-host "redis:${{ env:REDIS_IP }}" -p "5000:5000" -d ${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME:${{ env:IMAGE_TAG }}
+          docker run --name "restapp" --add-host "redis:$env:REDIS_IP" -p "5000:5000" -d ${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME:$env:IMAGE_TAG
 
       - name: Run Integration Tests
         run: |
