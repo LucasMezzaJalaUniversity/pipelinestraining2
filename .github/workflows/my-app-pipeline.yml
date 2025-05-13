@@ -90,6 +90,12 @@ jobs:
           echo "SEM_VERSION=${env:GITHUB_RUN_NUMBER}" | Out-File -FilePath $env:GITHUB_ENV -Append
           echo "IMAGE_TAG=$branchName-1.0.${env:GITHUB_RUN_NUMBER}" | Out-File -FilePath $env:GITHUB_ENV -Append
 
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
       - name: Pull Redis image
         run: docker pull redis:alpine
  
@@ -131,6 +137,12 @@ jobs:
           echo "BRANCH_NAME=$branchName" | Out-File -FilePath $env:GITHUB_ENV -Append
           echo "SEM_VERSION=${env:GITHUB_RUN_NUMBER}" | Out-File -FilePath $env:GITHUB_ENV -Append
           echo "IMAGE_TAG=$branchName-1.0.${env:GITHUB_RUN_NUMBER}" | Out-File -FilePath $env:GITHUB_ENV -Append
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Pull Redis image
         run: docker pull redis:alpine
