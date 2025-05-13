@@ -42,7 +42,7 @@ jobs:
   Build:
     runs-on: self-hosted
     needs: Static-codecheck
-
+ 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
