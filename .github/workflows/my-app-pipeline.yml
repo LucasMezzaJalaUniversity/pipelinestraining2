@@ -84,7 +84,7 @@ jobs:
 
       - name: Set env variables
         run: |
-          $branchName = "${env:GITHUB_REF_NAME}" -replace '/', '-'
+          $branchName = "${env:GITHUB_REF_NAME}" -replace '/', '-' 
           $branchName = $branchName.ToLower()
           echo "BRANCH_NAME=$branchName" | Out-File -FilePath $env:GITHUB_ENV -Append
           echo "SEM_VERSION=${env:GITHUB_RUN_NUMBER}" | Out-File -FilePath $env:GITHUB_ENV -Append
