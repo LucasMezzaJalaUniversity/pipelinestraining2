@@ -110,8 +110,8 @@ jobs:
 
       - name: Stop and remove old REST app container
         run: |
-          docker stop restapp
-          docker rm restapp
+          docker stop restapp 2>$null
+          docker rm restapp 2>$null
 
       - name: Run REST app container
         run: |
