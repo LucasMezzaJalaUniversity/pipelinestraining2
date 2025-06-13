@@ -121,7 +121,9 @@ jobs:
       #     python -m pytest test/integration -v
 
       - name: List files in directory
-        run: Get-ChildItem "$env:GITHUB_WORKSPACE/tests/postman"
+        run: |
+          Write-Host "GITHUB_WORKSPACE: $env:GITHUB_WORKSPACE"
+          Get-ChildItem "$env:GITHUB_WORKSPACE/tests/postman"
 
       - name: Run Integration Tests with newman
         run: |
@@ -129,10 +131,10 @@ jobs:
             $restappIp = docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' restapp
             
             docker run --rm `
-            --add-host "restapp:$restappIp" `
-            -v "$env:GITHUB_WORKSPACE/tests/postman:/etc/newman" `
-            postman/newman run /etc/newman/collection.json `
-            --environment /etc/newman/env.json
+              --add-host "restapp:$restappIp" `
+              -v "$env:GITHUB_WORKSPACE/tests/postman:/etc/newman" `
+              postman/newman run /etc/newman/collection.json `
+              --environment /etc/newman/env.json
 
   ## 🚀 4. 
   deploy-prod:
