@@ -120,6 +120,9 @@ jobs:
       #     pip install -r requirements.txt
       #     python -m pytest test/integration -v
 
+      - name: List files in directory
+        run: Get-ChildItem "$(Get-Location)/tests/postman"
+
       - name: Run Integration Tests with newman
         run: |
             docker pull postman/newman
@@ -128,7 +131,7 @@ jobs:
             docker run --rm `
             --add-host "restapp:$restappIp" `
             -v "$(Get-Location)/tests/postman:/etc/newman" `
-             postman/newman run /etc/newman/collection.json `
+            postman/newman run /etc/newman/collection.json `
             --environment /etc/newman/env.json
 
   ## 🚀 4. 
