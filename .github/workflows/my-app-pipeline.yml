@@ -132,9 +132,9 @@ jobs:
             
             docker run --rm `
               --add-host "restapp:$restappIp" `
-              -v "$env:GITHUB_WORKSPACE/tests/postman:/etc/newman" `
-              postman/newman run /etc/newman/collection.json `
-              --environment /etc/newman/env.json
+              -v "$env:GITHUB_WORKSPACE:/etc/newman" `
+              postman/newman run /etc/newman/tests/postman/collection.json `
+              --environment /etc/newman/tests/postman/env.json
 
   ## 🚀 4. 
   deploy-prod:
