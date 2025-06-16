@@ -121,7 +121,7 @@ jobs:
       #     python -m pytest test/integration -v
 
       - name: Ensure Docker network exists
-        run: docker network create mynet || echo "network mynet already exists"
+        run: docker network create mynet
 
       - name: Run Integration Tests with newman
         run: |
