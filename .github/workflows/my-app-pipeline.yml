@@ -120,11 +120,6 @@ jobs:
       #     pip install -r requirements.txt
       #     python -m pytest test/integration -v
 
-      - name: List files in directory
-        run: |
-          Write-Host "GITHUB_WORKSPACE: $env:GITHUB_WORKSPACE"
-          Get-ChildItem "$env:GITHUB_WORKSPACE/tests/postman"
-
       - name: Run Integration Tests with newman
         run: |
             docker pull postman/newman
@@ -132,9 +127,9 @@ jobs:
             
             docker run --rm `
               --add-host "restapp:$restappIp" `
-              -v "$env:GITHUB_WORKSPACE:/etc/newman" `
-              postman/newman run /etc/newman/tests/postman/collection.json `
-              --environment /etc/newman/tests/postman/env.json
+              -v "$(Get-Location)/utils/tests/postman:/etc/newman" `
+              postman/newman run /etc/newman/collection.json `
+              --environment /etc/newman/env.json
 
   ## 🚀 4. 
   deploy-prod:
