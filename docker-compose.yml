@@ -14,3 +14,7 @@ services:
       - redis
     environment:
       - REDIS_HOST=redis
+
+networks:
+  mynet:
+    driver: bridge
