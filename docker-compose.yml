@@ -4,6 +4,8 @@ services:
     container_name: redisService
     ports:
       - "6379:6379"
+    networks:
+      - mynet
 
   restapp:
     image: lucasmezza/restapp:$IMAGE_TAG
@@ -19,4 +21,4 @@ services:
 
 networks:
   mynet:
-    driver: bridge
+    external: true

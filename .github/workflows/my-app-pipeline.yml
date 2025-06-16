@@ -112,6 +112,9 @@ jobs:
       - name: Stop any existing containers  
         run: docker-compose down
 
+      - name: Ensure Docker network exists
+        run: docker network create mynet
+
       - name: Run with docker-compose 
         run: docker-compose up -d 
 
@@ -119,9 +122,6 @@ jobs:
       #   run: | 
       #     pip install -r requirements.txt
       #     python -m pytest test/integration -v
-
-      - name: Ensure Docker network exists
-        run: docker network create mynet
 
       - name: Run Integration Tests with newman
         run: |
@@ -176,6 +176,9 @@ jobs:
       - name: Stop any existing containers  
         run: docker-compose down
 
+      - name: Ensure Docker network exists
+        run: docker network create mynet
+
       - name: Run with docker-compose 
         run: docker-compose up -d 
         
@@ -183,9 +186,6 @@ jobs:
       #   run: |
       #     pip install -r requirements.txt
       #     python -m pytest test/integration -v
-
-      - name: Ensure Docker network exists
-        run: docker network create mynet
 
       - name: Run Integration Tests with newman
         run: |
