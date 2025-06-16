@@ -112,8 +112,8 @@ jobs:
       - name: Stop any existing containers  
         run: docker-compose down
 
-      - name: Ensure Docker network exists
-        run: docker network create mynet
+      # - name: Ensure Docker network exists
+      #   run: docker network create mynet
 
       - name: Run with docker-compose 
         run: docker-compose up -d 
@@ -176,8 +176,8 @@ jobs:
       - name: Stop any existing containers  
         run: docker-compose down
 
-      - name: Ensure Docker network exists
-        run: docker network create mynet
+      # - name: Ensure Docker network exists
+      #   run: docker network create mynet
 
       - name: Run with docker-compose 
         run: docker-compose up -d 
