@@ -130,6 +130,14 @@ jobs:
               postman/newman run /etc/newman/collection.json `
               --environment /etc/newman/env.json
 
+      - name: Run Integration Tests with artillery
+        run: |
+            docker pull artilleryio/artillery
+            
+            docker run --rm `
+              -v "$(Get-Location)/utils/tests/performance:/app" `
+              -w /app artilleryio/artillery run /app/test.yml
+
   ## 🚀 4. 
   deploy-prod:
     runs-on: self-hosted
