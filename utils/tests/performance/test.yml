@@ -1,8 +1,14 @@
 config: 
-  target: '' 
+  target: "http://restapp:5000/"
   phases: 
-    - duration: 30 
-      arrivalRate: 5 
+    - duration: 20 
+      arrivalRate: 5
+
+    - duration: 20 
+      arrivalRate: 10
+
+    - duration: 20 
+      arrivalRate: 15 
 scenarios: 
   - flow: 
       - get: 
