@@ -1,0 +1,21 @@
+services:
+  target:
+    build:
+      context: ./target
+    container_name: ubuntu-target
+    ports:
+      - "2222:22"
+      - "8080:80"
+
+  ansible:
+    build:
+      context: ./ansible
+    container_name: ansible-control
+    volumes:
+      - ./playbooks:/playbooks
+      - ./id_rsa:/root/.ssh/id_rsa:ro
+    depends_on:
+      - target
+    tty: true
+    stdin_open: true
+

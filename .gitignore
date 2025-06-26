@@ -54,3 +54,6 @@ dist/
 *.db
 *.sqlite3
 .cache/
+
+id_rsa
+*.pem
